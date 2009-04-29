@@ -28,7 +28,7 @@ foreach ($r as $data) {
 	else {
 		$isenabled = "enabled";
 	}
-	$write .= "<h3>[[User:".$data."|]]</h3>\n*".$data." has ".$count[0]['editcount']." [[Special:Contributions/".$data."|contributions]], including deleted contributions.\n*".$data." is currently [[User:".$data."/Run|".$isenabled."]].\n*".$data.'\'s last 5 contributions:'." \n";
+	$write .= ";[[User:".$data."|]]\n*".$data." has ".$count[0]['editcount']." [[Special:Contributions/".$data."|contributions]], including deleted contributions.\n*".$data." is currently [[User:".$data."/Run|".$isenabled."]].\n*".$data.'\'s last 5 contributions:'." \n";
 	foreach ($contribs as $data2) {
 		$write .= "**<span class=\"plainlinks\">[http://en.wikipedia.org/w/index.php?title=".urlencode($data2['title'])."&diff=prev&oldid=".$data2['revid']." ".$data2['title']." at ".$data2['timestamp'].".]</span>\n";
 	}
