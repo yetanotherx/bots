@@ -12,18 +12,19 @@ mysql_connect('enwiki-p.db.ts.wikimedia.org',$toolserver_username,$toolserver_pa
 @mysql_select_db('enwiki_p') or print mysql_error();
 
 $u = array();
-$users = $site->get_embeddedin('Template:Adminstats','500',$continue,2);
+$users = $site->get_embeddedin('Template:Adminstats','500',$continue,'2|3');
 
 foreach( $users as $user ) {
 	$u[] = $user;
 }
 while( isset($users[499]) ) {
-	$users = $site->get_embeddedin('Template:Adminstats','500',$continue,2);
+	$users = $site->get_embeddedin('Template:Adminstats','500',$continue,'2|3');
 	foreach( $users as $user ) {
 		$u[] = $user;
 	}
 }
 
+$u = array_shuffle($u);
 //$u = array("User talk:X!");
 
 foreach ($u as $name) {
