@@ -10,7 +10,7 @@ include '/home/soxred93/wikibot.classes.php';
 $wpq = new wikipediaquery;
 $wpapi = new wikipediaapi;
 $wpi = new wikipediaindex;
-$user = "SoxBot II";
+$user = "SoxBot";
 $pass = file_get_contents('/home/soxred93/.password');
 $wpapi->login($user,$pass);
 

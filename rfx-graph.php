@@ -7,7 +7,7 @@ $wpapi = new wikipediaapi;
 $wpi = new wikipediaindex;
 $http = new http;
 
-$user = "SoxBot II";
+$user = "SoxBot";
 $pass = file_get_contents('/home/soxred93/.password');
 
 $wpapi->login($user,$pass);

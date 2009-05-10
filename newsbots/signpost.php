@@ -12,7 +12,7 @@ while( $issue == "" ) {
 
 include("/home/soxred93/wikibot.classes.php");
 
-$user = 'SoxBot II';
+$user = 'SoxBot';
 $pass = file_get_contents('/home/soxred93/.password');
  
 //Setup the classes

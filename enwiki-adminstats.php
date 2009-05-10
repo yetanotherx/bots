@@ -119,17 +119,17 @@ function process ($rawuser) {
         $toedit = "Template:Adminstats/$rawuser\n";
         echo "Editing $toedit";
         
-        try {
-	        $page = new Page($pillar->cursite,$toedit);
-	} catch (PillarException $e) {
-	        continue;
-	}
-        
-    try {
-	    $page->put($out,"Updating Admin Stats",true);
-    } catch (PillarException $e) {
-	    continue;
-    }
+	    try {
+		    $page = new Page($pillar->cursite,$toedit);
+		} catch (PillarException $e) {
+		    continue;
+		}
+	        
+	    try {
+		    $page->put($out,"Updating Admin Stats",true);
+	    } catch (PillarException $e) {
+		    continue;
+	    }
 }
 
 function toDie($newdata) {

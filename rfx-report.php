@@ -274,7 +274,7 @@ if (preg_match('/(yes|enable|true)/iS',$runme)) {
 		$reportbuffer = $reportbuffer->put($propage,"Updating RfX Problem Report");
 	} else {*/
 		$reportbuffer = new Page($site,$output);
-		$reportbuffer = $reportbuffer->put($out, "Updating RFB Report, $numrfa RFA's, $numrfb RFB's");
+		$reportbuffer = $reportbuffer->put($out, "Updating RFB Report, $numrfa RFAs, $numrfb RFBs");
 	/*}*/
 } else {
 	echo "Could not run, disabled!\n";
