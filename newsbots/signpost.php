@@ -34,7 +34,7 @@ if( $argv[2] != "--nosource" ) {
 
 $delivery['page']  = 'Wikipedia:Wikipedia_Signpost/Tools/Spamlist';
 $delivery['text']  = "\n\n{{subst:Wikipedia:Wikipedia Signpost/Tools/Spamlist/Message}} \n\r<small>Delivered by ~~~ at ~~~~~</small>";
-$delivery['sum']   = "Delivering Vol. $vol, Issue $issue of Wikipedia Signpost ([[User:".$user."|BOT]])";
+$delivery['sum']   = "Delivering Vol. $vol, Issue $issue of [[WP:POST|Wikipedia Signpost]] ([[User:".$user."|BOT]])";
 
 
 preg_match_all('/[^\>]\[\[(User|User_talk|User talk):.+\]\]/Si',$wpq->getpage($delivery['page']),$pages);
@@ -56,6 +56,6 @@ function deliver($page) {
 	$content = $wpq->getpage($page);
    	echo "Sending to $page\n";
    	if ($content != ''){
-   		$wpi->post($page,$content.$delivery['text'],$delivery['sum'],$minor = false,$rv = null,$bot = false);
+   		$wpi->post($page,$content.$delivery['text'],$delivery['sum'],$minor = false,$rv = null,$bot = true);
    	}
 } 

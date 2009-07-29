@@ -73,7 +73,7 @@ foreach ($p as $pg) {
 			}
 		}
 		if( $remove == 'yes' ) {
-			$newtext = preg_replace('/\{\{('.implode('|',$tofind).')(.*)\}\}/i', '', $text);
+			$newtext = preg_replace('/\{\{('.implode('|',$tofind).')(.*?)\}\}/i', '', $text);
 			$diff = getTextDiff('unified', $text, $newtext);
 			echo $diff;
 			try {

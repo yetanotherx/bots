@@ -1,5 +1,7 @@
 <?php
-echo date('r');
+
+echo date('r')."\n";
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 require_once('/home/soxred93/wikibot.classes.php');
@@ -34,7 +36,6 @@ while( isset($users[499]) ) {
 
 $afds = array();
 foreach ($u as $name) {
-	echo $name;
     $rawuser = $name;
     
     try {
@@ -42,19 +43,15 @@ foreach ($u as $name) {
 	} catch (PillarException $e) {
 		continue;
 	}
-	$time = $page->get_lastedit();
+
 	$text = $page->get_text();
-	if( strtotime($time) < strtotime('-2 weeks') ) {
-		echo "WAY overdue...";
-		continue;
-	}
-	
+
 	if( preg_match( '/(\d{2}):(\d{2}), (\d{2}) (\w*?) (\d{4}) \(UTC\)/S', $text, $date ) ) {
 		
 		$nomdate = date('Y F d', strtotime("{$date[3]} {$date[4]} {$date[5]} {$date[1]}:{$date[2]}:00"));
 		
 	}
-
+	echo $nomdate."\n\n";
 	$afds[$nomdate][] = $rawuser;
 	
 }
@@ -74,16 +71,25 @@ $out .= '|}';
 echo $out;
 
 try {
-	$page = new Page($pillar->cursite,'User:X!/AFD report');
+	$page = new Page($site,'User:X!/AFD report');
+} catch (PillarException $e) {
+	try {
+		$page = new Page($site,'User:X!/AFD report');
+	} catch (PillarException $e) {
+		die;
+	}
+}
+
+try {
 	$page->put($out,"Updating AFD table",true);
 } catch (PillarException $e) {
 	try {
-		$page = new Page($pillar->cursite,'User:X!/AFD report');
 		$page->put($out,"Updating AFD table",true);
 	} catch (PillarException $e) {
 		continue;
 	}
 }
+
 echo date('r');
 
 ?>

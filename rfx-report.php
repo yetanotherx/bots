@@ -2,7 +2,7 @@
 
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
-require_once('/home/soxred93/rfalib2.php');
+require_once('/home/soxred93/rfalib3.php');
 
 $pillar = Pillar::ini_launch('/home/soxred93/configs/rfx-report.cfg');
 $site = $pillar->cursite;
@@ -64,7 +64,7 @@ function processrfb($cantidate) {
 	$supports = count($myRFA->support);
 	$neutrals = count($myRFA->neutral);
 	$n_dup = 0;
-		foreach($myRFA->duplicates as $dup) {
+	foreach($myRFA->duplicates as $dup) {
 		$n_dup++;
 	}
 	$dups = "no";
@@ -90,7 +90,7 @@ function processrfb($cantidate) {
 		$timeleft = $timeleft['days']. ' days, ' . $timeleft['hours'] . ' hours';
 	}
 	echo "{{Bureaucrat candidate|candidate= $cantidate|support= $supports|oppose= $opposes|neutral= $neutrals|end date= $enddate |time left=$timeleft|dups= $dups$s1}}";
-	return "{{Bureaucrat candidate|candidate= $cantidate|support= $supports|oppose= $opposes|neutral= $neutrals|end date= $enddate |time left=$timeleft|dups= $dups$s1}}";
+	return "{{Bureaucrat candidate|candidate= $cantidate|support= $supports|oppose= $opposes|neutral= $neutrals|end date= $enddate |time left=$timeleft|dups= $dups$s1|crat=yes}}";
 }
 function processrfa($cantidate) {
 	global $site;
@@ -181,6 +181,7 @@ function processrfa($cantidate) {
 	}
 	$enddate = $myRFA->enddate;
 	$tally = count($myRFA->support).'/'.count($myRFA->oppose).'/'.count($myRFA->neutral);
+	
 	$opposes = count($myRFA->oppose);
 	$supports = count($myRFA->support);
 	$neutrals = count($myRFA->neutral);
