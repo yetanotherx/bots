@@ -1,13 +1,30 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 
 $pillar = Pillar::ini_launch('/home/soxred93/configs/uncat-remove.cfg');
 $site = $pillar->cursite;
 
+$enablepage = "User:SoxBot/Run/Uncat";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
+
 $template = "Template:Uncategorized";
 $p = array();
+
+$ignorelist = array(
+	'Articles lacking sources (Erik9bot)',
+);
 
 $pages = $site->get_embeddedin($template,'500',$continue,0);
 foreach( $pages as $page ) {
@@ -59,6 +76,10 @@ foreach ($p as $pg) {
 		$cats = $cats[1];
 		$remove = 'no';
 		foreach( $cats as $cat ) {
+			if( in_array( $cat, $ignorelist ) ) {
+				continue;
+			}
+			
 			$vars = array(
 				'action' => 'query',
 				'prop'   => 'info',
@@ -76,6 +97,9 @@ foreach ($p as $pg) {
 			$newtext = preg_replace('/\{\{('.implode('|',$tofind).')(.*?)\}\}/i', '', $text);
 			$diff = getTextDiff('unified', $text, $newtext);
 			echo $diff;
+			
+			if( $page->checkexcluded() ) continue;
+			
 			try {
 				$page->put($newtext,"Removing categorization template",true);
 			} catch (PillarException $e) {

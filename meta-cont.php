@@ -1,5 +1,7 @@
 <?PHP
-echo shell_exec("echo $HOME");
+
+ini_set('memory_limit','16M');
+
 include '/home/soxred93/wikibot.classes.php';
 
 $wpq = new wikipediaquery;

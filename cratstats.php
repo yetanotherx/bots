@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 //Load includes
 include '/home/soxred93/wikibot.classes.php';
 include '/home/soxred93/rfalib2.php';
@@ -14,6 +16,10 @@ $wpi    = new wikipediaindex;
 //Logging in
 $wpapi->login($user,$pass);
 echo "Logged In!\n";
+
+if( !preg_match( '/(enable|yes|run|go|start)/i', $wpq->getpage("User:SoxBot/Run/Cratstats") ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 function getEndDate($rfa) {
 	global $wpq;

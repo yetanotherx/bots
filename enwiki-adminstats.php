@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 require_once('/home/soxred93/database.inc');
@@ -7,6 +9,17 @@ require_once('/home/soxred93/database.inc');
 $pillar = Pillar::ini_launch('/home/soxred93/configs/enwiki-adminstats.cfg');
 //$pillar = Pillar::get_instance;
 $site = $pillar->cursite;
+
+$enablepage = "User:SoxBot/Run/Adminstats";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 mysql_connect('enwiki-p.db.ts.wikimedia.org',$toolserver_username,$toolserver_password);
 @mysql_select_db('enwiki_p') or print mysql_error();
@@ -125,10 +138,12 @@ function process ($rawuser) {
 		    continue;
 		}
 	        
+	    if( $page->checkexcluded() ) continue;
+	    
 	    try {
 		    $page->put($out,"Updating Admin Stats",true);
 	    } catch (PillarException $e) {
-		    continue;
+		    die($e);
 	    }
 }
 

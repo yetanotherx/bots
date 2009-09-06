@@ -1,11 +1,24 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 require_once('/home/soxred93/textdiff/textdiff.php');
 
 $pillar = Pillar::ini_launch('/home/soxred93/configs/bad-image.cfg');
 $site = $pillar->cursite;
+
+$enablepage = "User:SoxBot/Run/BIL";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 //START GENERATING TRANSCLUSIONS
 $i = array();
@@ -89,6 +102,8 @@ foreach( $i as $image ) {
 		echo getTextDiff('unified', $image_page, $new_image_page);
 		
 		if( $image_page == $new_image_page ) continue;
+		if( $image_page_object->checkexcluded() ) continue;
+		
 		try {
 			$image_page_object->put($new_image_page,"Adding {{badimage}}",true);
 		} catch (PillarException $e) {
@@ -141,6 +156,8 @@ foreach( $bad_images as $bad_image ) {
 	echo getTextDiff('unified', $image_page, $new_image_page);
 		
 	if( $image_page == $new_image_page ) continue;
+	if( $image->checkexcluded() ) continue;
+	
 	try {
 		$image->put($new_image_page,"Adding {{badimage}}",true);
 	} catch (PillarException $e) {

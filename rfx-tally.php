@@ -1,5 +1,7 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 require_once('/home/soxred93/textdiff/textdiff.php');
@@ -7,6 +9,17 @@ require_once('/home/soxred93/rfalib3.php');
 
 $pillar = Pillar::ini_launch('/home/soxred93/configs/rfx-tally.cfg');
 $site = $pillar->cursite;
+
+$enablepage = "User:SoxBot/Run/Tally";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 $name = "Wikipedia:Requests for adminship";
 try {

@@ -16,7 +16,18 @@ require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 $pillar = Pillar::ini_launch('/home/soxred93/configs/afd-calc.cfg');
 $site = $pillar->cursite;
 
-if( $argv[2] != "--nosource" ) {
+$enablepage = "User:SoxBot/Run/Newsletter";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
+
+if( $argv[2] != "--nosource" || 1 == 1 ) {
 	try {
 		$page = new Page($pillar->cursite,'User:SoxBot/Source/Signpost');
 	} catch (PillarException $e) {
@@ -67,7 +78,7 @@ print_r($pages);die();
 
 function deliver($page) {
 	//Delivers the newsletter to $page
-	global $wpi, $wpapi, $wpq, $delivery, $errors, $pillar;
+	global $wpi, $wpapi, $wpq, $delivery, $errors, $pillar, $argv;
 	$page = "User_talk:".trim($page);
 
 	try {
@@ -90,12 +101,28 @@ function deliver($page) {
 	}
 	
    	echo "Sending to $page\n";
-   	if ($content != ''){
-   		try {
-			$page_instance->put($content.$delivery['text'],$delivery['sum'],false);
-		} catch (PillarException $e) {
-			$errors[] = array($page,$e);
-		}
+   	
+   	preg_match('/--start=(.*)/',$argv[1],$m);
+   	$tmparr = array(
+   		$page,
+   		@$m[1]
+   	);
+   		
+   	sort($tmparr);
+   	print_r($tmparr);
+   	if( $tmparr[0] == $page ) {
+   		echo "Already sent, skipping.\n";
+   	}		
+   	else {
+	   	if( $page_instance->checkexcluded() ) continue;
+	   	
+	   	if ($content != ''){
+	   		try {
+				$page_instance->put($content.$delivery['text'],$delivery['sum'],false);
+			} catch (PillarException $e) {
+				$errors[] = array($page,$e);
+			}
+	   	}
    	}
 } 
 

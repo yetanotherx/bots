@@ -1,5 +1,7 @@
 <?PHP
 
+ini_set('memory_limit','16M');
+
 include '/home/soxred93/wikibot.classes.php';
 
 $wpq = new wikipediaquery;
@@ -9,6 +11,10 @@ $http = new http;
 
 $user = "SoxBot";
 $pass = file_get_contents('/home/soxred93/.password');
+
+if( !preg_match( '/(enable|yes|run|go|start)/i', $wpq->getpage("User:SoxBot/Run/Sandbox") ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 $wpapi->login($user,$pass);
 
@@ -67,7 +73,20 @@ foreach ($touse as $i) {
         $pagetitle = $isenabled[0];
         if (strpos($isenabled[1], $user) !== false) {
                 $currtext = $wpq->getpage($pagetitle);
-                if ((strpos($currtext, $pagetext[$pagetitle]) === false) || (($hour == 00 || $hour == 12 || $hour  == 24) && (00 <= $minute && $minute >= 02))) {
+                if (
+                	(
+                		strpos($currtext, $pagetext[$pagetitle]) === false && 
+                		( 
+                			$pagetitle == "Wikipedia:Sandbox" || 
+                			$pagetitle == "Wikipedia talk:Sandbox" || 
+                			$pagetitle == "Wikipedia:Introduction"
+                		)
+                	) || 
+                	(
+                		($hour == 00 || $hour == 12 || $hour  == 24) && 
+                		(00 <= $minute && $minute >= 02)
+                	)
+                ) {
                         echo "Time to clean $pagetitle!\n";
                         $wpi->post($pagetitle,$pagetext[$pagetitle],'Clearing the sandbox ([[WP:BOT|BOT]] EDIT)');
                 }

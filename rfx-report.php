@@ -1,11 +1,24 @@
 <?php
 
+ini_set('memory_limit','16M');
+
 define('PILLAR','PILLAR'); 
 require_once('/home/soxred93/pillar/trunk/class.pillar.php');
 require_once('/home/soxred93/rfalib3.php');
 
 $pillar = Pillar::ini_launch('/home/soxred93/configs/rfx-report.cfg');
 $site = $pillar->cursite;
+
+$enablepage = "User:SoxBot/Run/RfXReport";
+try {
+	$run = new Page($site,$enablepage);
+	$run = $run->get_text();
+} catch (PillarException $e) {
+	die( "Got an error when getting the enable page.\n" );
+}
+if( !preg_match( '/(enable|yes|run|go|start)/i', $run ) ) {
+	die( "Bot is disabled.\n" );
+}
 
 $output = "User:X!/RfX Report";
 

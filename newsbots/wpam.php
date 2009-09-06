@@ -14,6 +14,10 @@ $user = "SoxBot";
 $pass = file_get_contents('/home/soxred93/.password');
 $wpapi->login($user,$pass);
 
+if( !preg_match( '/(enable|yes|run|go|start)/i', $wpq->getpage("User:SoxBot/Run/Newsletter") ) ) {
+	die( "Bot is disabled.\n" );
+}
+
 if( $argv[2] != "--nosource" ) {
 	$wpi->forcepost(
 		'User:'.$user.'/Source/Alternative Music',
